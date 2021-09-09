@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+import environ
+
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c)8=#9c^-#1nt4nmxsdwip2u5(^=l6*v-1b2o((nd+9b6uq$@8'
+#SECRET_KEY = 'django-insecure-c)8=#9c^-#1nt4nmxsdwip2u5(^=l6*v-1b2o((nd+9b6uq$@8'
+SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,11 +89,11 @@ WSGI_APPLICATION = 'xunau.wsgi.application'
 DATABASES = {
 'default': {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'xunau',
-    'HOST': '127.0.0.1',
-    'PORT': '3306',
-    'USER': 'root',
-    'PASSWORD': 'Dai12321!',
+    'NAME': env("DATABASE_NAME"),
+    'USER': env("DATABASE_USER"),
+    'PASSWORD': env("DATABASE_PASSWORD"),
+    'HOST': env("DATABASE_HOST"),
+    'PORT': env("DATABASE_PORT"),
 }}
 
 
