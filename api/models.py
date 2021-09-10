@@ -29,7 +29,8 @@ class Post(models.Model):
     categories = models.ManyToManyField('Category', related_name='posts', blank=True)
     hit = models.IntegerField(default=0)
     status = models.IntegerField(choices=STATUS, default=0)
-    image = models.ImageField(upload_to='images/', blank=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image_url = models.CharField(max_length=255, blank=True, default="")
 
     class Meta:
         ordering = ['-created']
