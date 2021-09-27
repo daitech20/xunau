@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models import Category, Post
 from rest_framework.validators import UniqueValidator
 import django.contrib.auth.password_validation as validators
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -72,3 +73,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class CustomJWTSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        credentials = {
+            'username': '',
+            'password': attrs.get("password")
+        }
+
+        # This is answering the original question, but do whatever you need here.
+        # For example in my case I had to check a different model that stores more user info
+        # But in the end, you should obtain the username to continue.
+        user_obj = User.objects.filter(email=attrs.get("username")).first() or User.objects.filter(username=attrs.get("username")).first()
+        if user_obj:
+            credentials['username'] = user_obj.username
+
+        return super().validate(credentials)
